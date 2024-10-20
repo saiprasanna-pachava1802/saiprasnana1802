@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slam Book</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f8ff;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 50%;
+            max-width: 700px;
+            margin: 50px auto;
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 2.5em;
+        }
+        label {
+            font-weight: bold;
+            color: #555;
+        }
+        input[type="text"], input[type="date"], textarea {
+            width: 100%;
+            padding: 8px;
+            margin: 10px 0 15px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+        input[type="text"]:focus,
+        input[type="date"]:focus,
+        textarea:focus {
+            border-color: #4CAF50;
+        }
+        input[type="submit"],
+        input[type="reset"],
+        .home-button {
+            width: 30%;
+            padding: 10px;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+            margin-right: 5%;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+        input[type="submit"]:hover,
+        .home-button:hover {
+            background-color: Green;
+            transform: scale(1.05);
+        }
+        input[type="reset"] {
+            background-color:Red;
+        }
+        input[type="reset"]:hover {
+            background-color: Green;
+        }
+        .home-button {
+            background-color: black; /* Black background for Home button */
+        }
+        #responseMessage {
+            text-align: center;
+            font-size: 1.2em;
+            color: #333;
+            margin-top: 20px;
+        }
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Slam Book</h1>
+    <form id="slamForm">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required>
+
+        <label for="dob">Date of Birth:</label>
+        <input type="date" id="dob" name="dob" required>
+
+        <label for="favColor">Favorite Color:</label>
+        <input type="text" id="favColor" name="favColor" required>
+
+        <label for="hobbies">Hobbies:</label>
+        <textarea id="hobbies" name="hobbies" rows="3" required></textarea>
+
+        <label for="dream">Your Dream:</label>
+        <textarea id="dream" name="dream" rows="3" required></textarea>
+
+        <label for="bestFriend">Best Friend:</label>
+        <input type="text" id="bestFriend" name="bestFriend" required>
+
+        <label for="futureGoal">Future Goal:</label>
+        <input type="text" id="futureGoal" name="futureGoal" required>
+
+        <div class="button-container">
+            <input type="submit" value="Submit">
+            <input type="reset" value="Reset">
+            <a class="home-button" href="index.html" style="text-decoration: none;">Home</a>
+        </div>
+    </form>
+    <p id="responseMessage"></p>
+</div>
+
+<script>
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbwiCD0d3mKjX3KFsmdH9VPOxNRSq2rklgzQO_hhBr5hhigTKBQ5YdmpRAyuV1tPEGqJLQ/exec';
+    const form = document.forms['slamForm'];
+
+    form.addEventListener('submit', e => {
+        e.preventDefault();
+
+        let isValid = true;
+        for (let input of form.elements) {
+            if (input.required && !input.value) {
+                isValid = false;
+                alert(`${input.previousElementSibling.innerText} is required!`);
+                input.focus();
+                break;
+            }
+        }
+
+        if (isValid) {
+            fetch(scriptURL, { method: 'POST', body: new FormData(form)})
+            .then(response => {
+                document.getElementById('responseMessage').innerHTML = "Form submitted successfully!";
+                form.reset();
+            })
+            .catch(error => {
+                document.getElementById('responseMessage').innerHTML = "Error submitting form!";
+                console.error('Error!', error.message);
+            });
+        }
+    });
+</script>
+
+</body>
+</html>
